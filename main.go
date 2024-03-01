@@ -21,6 +21,7 @@ func main() {
 
 	router := chi.NewRouter()
 	routerHealth := chi.NewRouter()
+	routerUsers := chi.NewRouter()
 
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
@@ -32,7 +33,11 @@ func main() {
 	routerHealth.Get("/health", handleHealth)
 	routerHealth.Get("/error", errorHandler)
 
+	routerUsers.Get("/users", getUsers)
+	routerUsers.Get("/health", handleHealth)
+
 	router.Mount("/check", routerHealth)
+	router.Mount("/api", routerUsers)
 
 	server := &http.Server{
 		Handler: router,

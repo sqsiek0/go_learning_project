@@ -54,7 +54,7 @@ func main() {
 	routerHealth.Get("/error", errorHandler)
 
 	routerUsers.Post("/user", apiCnf.handleCreateUser)
-	routerUsers.Get("/health", handleHealth)
+	routerUsers.Get("/users", apiCnf.handleGetUsers)
 
 	router.Mount("/check", routerHealth)
 	router.Mount("/api", routerUsers)

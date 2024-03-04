@@ -36,5 +36,15 @@ func (apiCnf *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	respondWithJSON(w, 200, changeUserTitles(user))
+	listOfUsers := make([]database.User, 0)
+	respondWithJSON(w, 200, changeUserTitles(append(listOfUsers, user)))
+}
+
+func (apiCnf *apiConfig) handleGetUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := apiCnf.DB.GetUsers(r.Context())
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintln("Error during getting users", err))
+	}
+
+	respondWithJSON(w, 200, changeUserTitles(users))
 }

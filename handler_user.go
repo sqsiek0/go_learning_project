@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/sqsiek0/go_learning_project/internal/auth"
 	"github.com/sqsiek0/go_learning_project/internal/database"
 )
 
@@ -21,6 +22,13 @@ func (apiCnf *apiConfig) handleCreateUser(w http.ResponseWriter, r *http.Request
 	err := decoder.Decode(&params)
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintln("Error parsing JSON", err))
+		return
+	}
+	if params.Name == "" {
+		respondWithError(w, 400, fmt.Sprintln("Invalid name provided"))
+		return
+	} else if params.Surname == "" {
+		respondWithError(w, 400, fmt.Sprintln("Invalid surname provided"))
 		return
 	}
 
@@ -47,4 +55,21 @@ func (apiCnf *apiConfig) handleGetUsers(w http.ResponseWriter, r *http.Request) 
 	}
 
 	respondWithJSON(w, 200, changeUserTitles(users))
+}
+
+func (apiCnf *apiConfig) handleGetUserByApiKey(w http.ResponseWriter, r *http.Request) {
+	value, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Invalid headers"))
+		return
+	}
+
+	user, err := apiCnf.DB.GetUserByApiKey(r.Context(), value)
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Error during searching for user"))
+		return
+	}
+
+	listOfUsers := make([]database.User, 0)
+	respondWithJSON(w, 200, changeUserTitles(append(listOfUsers, user)))
 }

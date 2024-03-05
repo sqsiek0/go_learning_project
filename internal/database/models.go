@@ -16,4 +16,5 @@ type User struct {
 	Updatedat time.Time
 	Name      string
 	Surname   string
+	ApiKey    string
 }

@@ -13,6 +13,7 @@ type User struct {
 	Updatedat time.Time `json:"updated_at"`
 	Name      string    `json:"name"`
 	Surname   string    `json:"surname"`
+	ApiKey    string    `json:"api_key"`
 }
 
 func changeUserTitles(dbUser []database.User) []User {
@@ -25,6 +26,7 @@ func changeUserTitles(dbUser []database.User) []User {
 			Updatedat: v.Updatedat,
 			Name:      v.Name,
 			Surname:   v.Surname,
+			ApiKey:    v.ApiKey,
 		})
 	}
 	return listOfUsers

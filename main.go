@@ -55,7 +55,7 @@ func main() {
 
 	routerUsers.Post("/user", apiCnf.handleCreateUser)
 	routerUsers.Get("/users", apiCnf.handleGetUsers)
-	routerUsers.Get("/usersApi", apiCnf.handleGetUserByApiKey)
+	routerUsers.Get("/usersApi", apiCnf.middlewareAuth(apiCnf.handleGetUserByApiKey))
 
 	router.Mount("/check", routerHealth)
 	router.Mount("/api", routerUsers)
